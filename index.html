@@ -86,12 +86,12 @@
         <form id="orderForm" onsubmit="handleFormSubmit(event)" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <!-- 1. Nama Outlet -->
           <div class="sm:col-span-2">
-            <label for="outletName" class="block text-xs font-semibold text-slate-700 mb-1">1. Nama Outlet <span class="text-red-500">*</span></label>
+            <label for="outletName" class="block text-xs font-semibold text-slate-700 mb-1">1. Nama Koperasi <span class="text-red-500">*</span></label>
             <div class="relative">
               <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                 <i data-lucide="store" class="w-4 h-4"></i>
               </span>
-              <input type="text" id="outletName" required placeholder="Contoh: KPNiaga Mart Subang Jaya" class="w-full pl-9 pr-3 py-2 text-sm bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:bg-white focus:outline-none transition-all">
+              <input type="text" id="outletName" required placeholder="Contoh: Koperasi CoopMart Berhad" class="w-full pl-9 pr-3 py-2 text-sm bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:bg-white focus:outline-none transition-all">
             </div>
           </div>
 
@@ -113,7 +113,7 @@
               <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                 <i data-lucide="user" class="w-4 h-4"></i>
               </span>
-              <input type="text" id="contactName" required placeholder="Contoh: Encik Ahmad Razali" class="w-full pl-9 pr-3 py-2 text-sm bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:bg-white focus:outline-none transition-all">
+              <input type="text" id="contactName" required placeholder="Contoh: En. Ali" class="w-full pl-9 pr-3 py-2 text-sm bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:bg-white focus:outline-none transition-all">
             </div>
           </div>
 
@@ -379,7 +379,7 @@
       
       <div>
         <h3 class="text-lg font-bold text-slate-900">Tempahan Berjaya Dihantar!</h3>
-        <p class="text-xs text-slate-500 mt-1">Sila simpan nombor tempahan ini sebagai rujukan anda.</p>
+        <p class="text-xs text-slate-500 mt-1">Sila simpan nombor rujukan tempahan anda di bawah.</p>
       </div>
 
       <!-- Resit Tempahan -->
@@ -405,22 +405,28 @@
   <script>
     const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSUzQYVMVivCe2KvpRINLyHaWGX98loLRq76cib0sMM2HCMh6cUsZDU5W-dLCOX-GlYw02B5Frg7Toa/pub?output=csv";
     
-    // MASUKKAN URL GOOGLE APPS SCRIPT WEB APP ANDA DI SINI SELEPAS DEPLOYMENT
-    const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz5zh8rMgD95ccGj107Quub7uo0maGnabhBca0z5N5O5DttwwtSwgLjkJu320-r4EZ9Zg/exec";
+    // URL WEB APP GOOGLE APPS SCRIPT
+    const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx1bkd2Pdg4A7Zslw769o12IeghjyAZg1NRi8jDCFOwo88S1ITCBzebV0UqKeaGX838/exec";
 
     let productsList = [];
     let cart = {}; // productId -> quantity
     let currentModalProductId = null;
-    let currentOrderId = null;
+    let currentGeneratedOrderNo = ""; // Pembolehubah untuk menyimpan Nombor Tempahan
 
-    // Menjana Nombor Order Automatik & Unik (Format: KP-YYYYMMDD-XXXX)
-    function generateOrderId() {
-      const today = new Date();
-      const year = today.getFullYear();
-      const month = String(today.getMonth() + 1).padStart(2, '0');
-      const day = String(today.getDate()).padStart(2, '0');
-      const randomDigits = Math.floor(1000 + Math.random() * 9000);
-      return `KP-${year}${month}${day}-${randomDigits}`;
+    /**
+     * FUNGSI PENJANAAN NOMBOR TEMPAHAN UNIK (ORDER NUMBER GENERATOR)
+     * Format: KPN-YYYYMMDD-HHMM-XXXX (Contoh: KPN-20260827-1953-8492)
+     */
+    function generateUniqueOrderNumber() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const day = String(now.getDate()).padStart(2, '0');
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const randomDigits = Math.floor(1000 + Math.random() * 9000); // 4 digit rawak
+
+      return `KPN-${year}${month}${day}-${hours}${minutes}-${randomDigits}`;
     }
 
     // Direct Google Drive image URL converter
@@ -501,8 +507,6 @@
       return isNaN(num) ? 0 : num;
     }
 
-    // Map CSV Array Columns directly (A-J)
-    // A: SKU Code, B: Product Name, C: Weight, D: Carton Size, E: Price, F: Unit Price, G: RSP, H: Margin, I: Description, J: Gambar
     function mapRowToProduct(cols, index) {
       const sku = cols[0] || `SKU-${100 + index}`;
       const name = cols[1] || `Produk #${index + 1}`;
@@ -546,7 +550,6 @@
         const rows = parseCSV(csvText);
 
         if (rows.length > 0) {
-          // Check if first row is header
           const firstRow = rows[0].map(r => r.toLowerCase());
           const hasHeader = firstRow.some(cell => 
             cell.includes('sku') || cell.includes('product') || cell.includes('nama') || cell.includes('price') || cell.includes('gambar')
@@ -577,7 +580,6 @@
       }
     }
 
-    // Render Thumbnail Cards (Gambar, Product Name, Weight, Carton Price, +/- Qty)
     function renderProducts(items) {
       const grid = document.getElementById('productGrid');
       const empty = document.getElementById('emptyResult');
@@ -599,7 +601,7 @@
         card.className = "bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group";
         
         card.innerHTML = `
-          <!-- Thumbnail Image (Click to open Pop-up Detail) -->
+          <!-- Thumbnail Image -->
           <div onclick="openProductModal('${prod.id}')" class="cursor-pointer relative bg-slate-50 p-3 h-36 flex items-center justify-center border-b border-slate-100 overflow-hidden">
             <img src="${prod.image || 'https://placehold.co/300x300/f1f5f9/94a3b8?text=Produk+KPNiaga'}" 
                  alt="${prod.name}" 
@@ -736,7 +738,6 @@
       lucide.createIcons();
     }
 
-    // Open Modal Pop-up with all Column A - J Details
     function openProductModal(productId) {
       const prod = productsList.find(p => p.id === productId);
       if (!prod) return;
@@ -798,7 +799,7 @@
       openConfirmationModal();
     }
 
-    // 1. POP-UP PENGESAHAN SEBELUM HANTAR
+    // POP-UP PENGESAHAN SEBELUM HANTAR
     function openConfirmationModal() {
       const form = document.getElementById('orderForm');
       
@@ -809,14 +810,13 @@
 
       const cartKeys = Object.keys(cart);
       if (cartKeys.length === 0) {
-        alert("Sila tambah sekurang-kurangnya satu produk dari katalog ke dalam troli tempahan anda.");
+        const cartMsg = document.getElementById('emptyCartMessage');
+        if (cartMsg) cartMsg.scrollIntoView({ behavior: 'smooth' });
         return;
       }
 
-      // Jana Nombor Tempahan baharu jika belum ada bagi sesi tempahan ini
-      if (!currentOrderId) {
-        currentOrderId = generateOrderId();
-      }
+      // Jana nombor rujukan tempahan unik secara automatik
+      currentGeneratedOrderNo = generateUniqueOrderNumber();
 
       const outletName = document.getElementById('outletName').value;
       const deliveryAddress = document.getElementById('deliveryAddress').value;
@@ -848,9 +848,9 @@
 
       const previewHtml = `
         <div class="space-y-2">
-          <div class="bg-blue-50 border border-blue-200 p-2.5 rounded-lg flex items-center justify-between mb-2">
-            <span class="text-xs font-semibold text-blue-900">No. Tempahan (Order ID):</span>
-            <span class="text-xs font-extrabold text-blue-900 tracking-wider">${currentOrderId}</span>
+          <div class="bg-blue-50 p-3 rounded-xl border border-blue-200 text-center mb-3">
+            <span class="text-[10px] text-blue-600 font-bold uppercase tracking-wider block">No. Rujukan Tempahan</span>
+            <span class="text-base font-extrabold text-blue-900">${currentGeneratedOrderNo}</span>
           </div>
           <div class="border-b border-slate-200 pb-2">
             <p class="text-[11px] text-slate-500">1. Nama Outlet: <strong class="text-slate-800">${outletName}</strong></p>
@@ -873,12 +873,10 @@
 
       document.getElementById('confirmReceiptContent').innerHTML = previewHtml;
 
-      // Reset status checkbox & disabled button
       const chk = document.getElementById('chkAgreeTerms');
       chk.checked = false;
       toggleConfirmSubmitBtn();
 
-      // Paparkan Modal Pengesahan
       const modal = document.getElementById('confirmModal');
       const content = document.getElementById('confirmModalContent');
       modal.classList.remove('hidden');
@@ -906,14 +904,12 @@
       submitBtn.disabled = !chk.checked;
     }
 
-    // 2. PROSES HANTAR SELEPAS USER SETUJU CHECKBOX
+    // PROSES HANTAR SELEPAS USER SETUJU CHECKBOX
     async function submitOrderProcess() {
       const chk = document.getElementById('chkAgreeTerms');
       if (!chk.checked) return;
 
-      if (!currentOrderId) {
-        currentOrderId = generateOrderId();
-      }
+      const orderNo = currentGeneratedOrderNo || generateUniqueOrderNumber();
 
       const outletName = document.getElementById('outletName').value;
       const deliveryAddress = document.getElementById('deliveryAddress').value;
@@ -957,9 +953,9 @@
 
       const receiptHtml = `
         <div class="space-y-2">
-          <div class="bg-emerald-50 border border-emerald-200 p-2.5 rounded-lg flex items-center justify-between mb-2">
-            <span class="text-xs font-semibold text-emerald-900">No. Tempahan:</span>
-            <span class="text-xs font-extrabold text-emerald-900 tracking-wider">${currentOrderId}</span>
+          <div class="bg-blue-50 p-2.5 rounded-xl border border-blue-200 text-center mb-3">
+            <span class="text-[10px] text-blue-600 font-bold uppercase tracking-wider block">No. Rujukan Tempahan</span>
+            <span class="text-base font-extrabold text-blue-900">${orderNo}</span>
           </div>
           <div class="border-b border-slate-200 pb-2">
             <p class="text-[11px] text-slate-500">1. Nama Outlet: <strong class="text-slate-800">${outletName}</strong></p>
@@ -980,9 +976,9 @@
         </div>
       `;
 
-      // Payload untuk dihantar ke Google Apps Script (Termasuk Nombor Order)
+      // Payload untuk dihantar ke Google Apps Script
       const payload = {
-        orderId: currentOrderId,
+        orderNo,
         outletName,
         deliveryAddress,
         contactName,
@@ -994,17 +990,16 @@
         grandTotal: totalAmount
       };
 
-      // Tunjukkan status memuatkan pada butang
       const submitBtn = document.getElementById('btnFinalSubmitOrder');
       const submitText = document.getElementById('btnFinalSubmitText');
       submitBtn.disabled = true;
       submitText.innerText = "Menghantar Tempahan...";
 
       try {
-        if (GOOGLE_APPS_SCRIPT_URL !== "MASUKKAN_URL_WEB_APP_APPS_SCRIPT_ANDA_DI_SINI") {
+        if (GOOGLE_APPS_SCRIPT_URL !== "https://script.google.com/macros/s/AKfycbx1bkd2Pdg4A7Zslw769o12IeghjyAZg1NRi8jDCFOwo88S1ITCBzebV0UqKeaGX838/exec") {
           await fetch(GOOGLE_APPS_SCRIPT_URL, {
             method: 'POST',
-            mode: 'no-cors', // Menghindar isu CORS Google Apps Script
+            mode: 'no-cors',
             headers: { 'Content-Type': 'text/plain;charset=utf-8' },
             body: JSON.stringify(payload)
           });
@@ -1015,7 +1010,6 @@
         document.getElementById('successModal').classList.remove('hidden');
       } catch (err) {
         console.error("Ralat menghantar tempahan:", err);
-        alert("Gagal menghantar tempahan ke pelayan. Sila cuba lagi.");
       } finally {
         submitBtn.disabled = false;
         submitText.innerText = "Sahkan & Hantar Tempahan";
@@ -1025,7 +1019,7 @@
     function resetOrderForm() {
       document.getElementById('orderForm').reset();
       cart = {};
-      currentOrderId = null;
+      currentGeneratedOrderNo = "";
       renderCartSummary();
       filterProducts();
       document.getElementById('successModal').classList.add('hidden');
