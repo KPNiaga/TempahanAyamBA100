@@ -406,7 +406,7 @@
     const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSUzQYVMVivCe2KvpRINLyHaWGX98loLRq76cib0sMM2HCMh6cUsZDU5W-dLCOX-GlYw02B5Frg7Toa/pub?output=csv";
     
     // MASUKKAN URL GOOGLE APPS SCRIPT WEB APP ANDA DI SINI SELEPAS DEPLOYMENT
-    const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwIUPeh0gHpG78T2zSA9DclcHzU_Du7i4HAFgH51Ar0osQpDsdWOPVM0-jZ2pSbQxfadg/exec";
+    const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw3_qTBMdfw7cPAOnxOPQmuirY0FEe0zhfjcE3LYz76ZKJXBumHEi0yT9byyadUUzvqbw/exec";
 
     let productsList = [];
     let cart = {}; // productId -> quantity
@@ -985,7 +985,7 @@
       submitText.innerText = "Menghantar Tempahan...";
 
       try {
-        if (GOOGLE_APPS_SCRIPT_URL !== "https://script.google.com/macros/s/AKfycbwIUPeh0gHpG78T2zSA9DclcHzU_Du7i4HAFgH51Ar0osQpDsdWOPVM0-jZ2pSbQxfadg/exec") {
+        if (GOOGLE_APPS_SCRIPT_URL !== "https://script.google.com/macros/s/AKfycbw3_qTBMdfw7cPAOnxOPQmuirY0FEe0zhfjcE3LYz76ZKJXBumHEi0yT9byyadUUzvqbw/exec") {
           await fetch(GOOGLE_APPS_SCRIPT_URL, {
             method: 'POST',
             mode: 'no-cors', // Menghindar isu CORS Google Apps Script
