@@ -406,7 +406,7 @@
     const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSUzQYVMVivCe2KvpRINLyHaWGX98loLRq76cib0sMM2HCMh6cUsZDU5W-dLCOX-GlYw02B5Frg7Toa/pub?output=csv";
     
     // MASUKKAN URL GOOGLE APPS SCRIPT WEB APP ANDA DI SINI SELEPAS DEPLOYMENT
-    const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzORGcR1WJ2HnxaYlDxYpt9okNw4hLr5AJIawCa2raIB4WwtVymES2G-y8oGO_w5Ojqyw/exec";
+    const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz5zh8rMgD95ccGj107Quub7uo0maGnabhBca0z5N5O5DttwwtSwgLjkJu320-r4EZ9Zg/exec";
 
     let productsList = [];
     let cart = {}; // productId -> quantity
@@ -891,14 +891,6 @@
       const chk = document.getElementById('chkAgreeTerms');
       if (!chk.checked) return;
 
-      // Jana Nombor Tempahan Unik (Contoh: KPN-20260827-4829)
-      const now = new Date();
-      const dateStr = now.getFullYear().toString() + 
-                      String(now.getMonth() + 1).padStart(2, '0') + 
-                      String(now.getDate()).padStart(2, '0');
-      const randomNum = Math.floor(1000 + Math.random() * 9000);
-      const orderNo = `KPN-${dateStr}-${randomNum}`;
-
       const outletName = document.getElementById('outletName').value;
       const deliveryAddress = document.getElementById('deliveryAddress').value;
       const contactName = document.getElementById('contactName').value;
@@ -941,10 +933,6 @@
 
       const receiptHtml = `
         <div class="space-y-2">
-          <div class="bg-blue-50 p-2.5 rounded-xl border border-blue-200 text-center mb-3">
-            <span class="text-[10px] text-blue-600 font-bold uppercase tracking-wider block">No. Rujukan Tempahan</span>
-            <span class="text-base font-extrabold text-blue-900">${orderNo}</span>
-          </div>
           <div class="border-b border-slate-200 pb-2">
             <p class="text-[11px] text-slate-500">1. Nama Outlet: <strong class="text-slate-800">${outletName}</strong></p>
             <p class="text-[11px] text-slate-500">2. Alamat Penghantaran: <span class="text-slate-700">${deliveryAddress}</span></p>
@@ -966,7 +954,6 @@
 
       // Payload untuk dihantar ke Google Apps Script
       const payload = {
-        orderNo,
         outletName,
         deliveryAddress,
         contactName,
@@ -985,7 +972,7 @@
       submitText.innerText = "Menghantar Tempahan...";
 
       try {
-        if (GOOGLE_APPS_SCRIPT_URL !== "https://script.google.com/macros/s/AKfycbzORGcR1WJ2HnxaYlDxYpt9okNw4hLr5AJIawCa2raIB4WwtVymES2G-y8oGO_w5Ojqyw/exec") {
+        if (GOOGLE_APPS_SCRIPT_URL !== "MASUKKAN_URL_WEB_APP_APPS_SCRIPT_ANDA_DI_SINI") {
           await fetch(GOOGLE_APPS_SCRIPT_URL, {
             method: 'POST',
             mode: 'no-cors', // Menghindar isu CORS Google Apps Script
