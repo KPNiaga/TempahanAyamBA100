@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Borang Tempahan Ayam BA100</title>
+  <title>Borang Tempahan Ayam BA100 - KPNiaga</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Google Fonts: Plus Jakarta Sans -->
@@ -39,11 +39,17 @@
     ::-webkit-scrollbar-thumb:hover {
       background: #94a3b8;
     }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+    .animate-pulse-glow {
+      animation: pulseGlow 2s infinite ease-in-out;
+    }
   </style>
 </head>
 <body class="bg-slate-100 text-slate-800 antialiased min-h-screen flex flex-col selection:bg-blue-100 selection:text-blue-900">
 
-  <!-- Navigation Header -->
   <header class="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       <div class="flex items-center gap-3">
@@ -65,7 +71,6 @@
     </div>
   </header>
 
-  <!-- Main Grid Layout -->
   <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
 
     <!-- Left Column: Form & Catalog (8 Cols) -->
@@ -79,7 +84,7 @@
           </div>
           <div>
             <h2 class="text-base font-bold text-slate-900">Maklumat Tempahan & Penghantaran</h2>
-            <p class="text-xs text-slate-500">Sila isi butiran pemohon dan alamat penghantaran.</p>
+            <p class="text-xs text-slate-500">Sila isi butiran pemohon dan zon lokasi penghantaran sah.</p>
           </div>
         </div>
 
@@ -106,9 +111,32 @@
             </div>
           </div>
 
-          <!-- 3. Nama Pegawai untuk Dihubungi -->
+          <!-- 3. Pilihan Negeri (Restricted List) -->
+          <div class="sm:col-span-2">
+            <label for="deliveryState" class="block text-xs font-semibold text-slate-700 mb-1">
+              3. Negeri Penghantaran <span class="text-red-500">*</span>
+            </label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                <i data-lucide="building-2" class="w-4 h-4"></i>
+              </span>
+              <select id="deliveryState" required class="w-full pl-9 pr-3 py-2 text-sm bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:bg-white focus:outline-none transition-all appearance-none">
+                <option value="" disabled selected>-- Pilih Negeri Penghantaran --</option>
+                <option value="Selangor">Selangor</option>
+                <option value="WP Kuala Lumpur">WP Kuala Lumpur</option>
+                <option value="WP Putrajaya">WP Putrajaya</option>
+                <option value="Negeri Sembilan">Negeri Sembilan</option>
+                <option value="Melaka">Melaka</option>
+              </select>
+              <span class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-slate-400">
+                <i data-lucide="chevron-down" class="w-4 h-4"></i>
+              </span>
+            </div>
+          </div>
+
+          <!-- 4. Nama Pegawai untuk Dihubungi -->
           <div>
-            <label for="contactName" class="block text-xs font-semibold text-slate-700 mb-1">3. Nama Pegawai untuk Dihubungi <span class="text-red-500">*</span></label>
+            <label for="contactName" class="block text-xs font-semibold text-slate-700 mb-1">4. Nama Pegawai untuk Dihubungi <span class="text-red-500">*</span></label>
             <div class="relative">
               <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                 <i data-lucide="user" class="w-4 h-4"></i>
@@ -117,9 +145,9 @@
             </div>
           </div>
 
-          <!-- 4. No. Telefon Pegawai untuk Dihubungi -->
+          <!-- 5. No. Telefon Pegawai untuk Dihubungi -->
           <div>
-            <label for="contactPhone" class="block text-xs font-semibold text-slate-700 mb-1">4. No. Telefon Pegawai untuk Dihubungi <span class="text-red-500">*</span></label>
+            <label for="contactPhone" class="block text-xs font-semibold text-slate-700 mb-1">5. No. Telefon Pegawai untuk Dihubungi <span class="text-red-500">*</span></label>
             <div class="relative">
               <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                 <i data-lucide="phone" class="w-4 h-4"></i>
@@ -128,9 +156,9 @@
             </div>
           </div>
 
-          <!-- 5. E-mel Pegawai untuk Dihubungi -->
+          <!-- 6. E-mel Pegawai untuk Dihubungi -->
           <div>
-            <label for="contactEmail" class="block text-xs font-semibold text-slate-700 mb-1">5. E-mel Pegawai <span class="text-red-500">*</span></label>
+            <label for="contactEmail" class="block text-xs font-semibold text-slate-700 mb-1">6. E-mel Pegawai <span class="text-red-500">*</span></label>
             <div class="relative">
               <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                 <i data-lucide="mail" class="w-4 h-4"></i>
@@ -139,9 +167,9 @@
             </div>
           </div>
 
-          <!-- 6. Tarikh untuk penerimaan (optional) -->
+          <!-- 7. Tarikh untuk penerimaan (optional) -->
           <div>
-            <label for="deliveryDate" class="block text-xs font-semibold text-slate-700 mb-1">6. Tarikh Penerimaan <span class="text-slate-400 font-normal">(Pilihan)</span></label>
+            <label for="deliveryDate" class="block text-xs font-semibold text-slate-700 mb-1">7. Tarikh Penerimaan <span class="text-slate-400 font-normal">(Pilihan)</span></label>
             <div class="relative">
               <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                 <i data-lucide="calendar" class="w-4 h-4"></i>
@@ -218,8 +246,29 @@
           </div>
         </div>
 
+        <!-- Progress Bar & Threshold Container -->
+        <div id="minOrderProgressContainer" class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-2 mb-3">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-bold text-slate-700 flex items-center gap-1.5">
+              <i data-lucide="truck" class="w-3.5 h-3.5 text-blue-700"></i>
+              Kelayakan Penghantaran:
+            </span>
+            <span id="minOrderPercent" class="font-black text-amber-600">0%</span>
+          </div>
+
+          <!-- Progress Bar Visual Track -->
+          <div class="w-full bg-slate-200 h-3 rounded-full overflow-hidden p-0.5 border border-slate-300/50">
+            <div id="minProgressBar" class="bg-gradient-to-r from-amber-500 to-amber-600 h-full rounded-full transition-all duration-300 w-0"></div>
+          </div>
+
+          <div id="minOrderNotice" class="text-[11px] text-slate-600 font-medium leading-tight flex items-start gap-1">
+            <i data-lucide="alert-circle" class="w-3.5 h-3.5 text-amber-600 flex-shrink-0 mt-0.5"></i>
+            <span>Tempahan minimum <strong>RM 1,000.00</strong> diperlukan untuk penghantaran. Baki: <strong class="text-amber-700" id="minOrderDifference">RM 1,000.00</strong>.</span>
+          </div>
+        </div>
+
         <!-- Cart Subtotal & Checkout Button -->
-        <div class="pt-4 border-t border-slate-100 flex flex-col gap-3">
+        <div class="pt-3 border-t border-slate-100 flex flex-col gap-3">
           <div class="space-y-1 text-xs">
             <div class="flex justify-between text-slate-600">
               <span>Jumlah Karton:</span>
@@ -236,9 +285,10 @@
             <span id="cartGrandTotal" class="text-base font-extrabold text-blue-900">RM 0.00</span>
           </div>
 
-          <button id="btnSubmitOrder" type="button" onclick="openConfirmationModal()" class="w-full bg-blue-700 hover:bg-blue-800 active:bg-blue-900 text-white font-bold py-3 px-4 rounded-xl shadow-md transition-all flex items-center justify-center gap-2 text-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
-            <i data-lucide="send" class="w-4 h-4"></i>
-            <span id="btnSubmitText">Hantar Tempahan</span>
+          <!-- Submit Button disabled state when < RM1,000 -->
+          <button id="btnSubmitOrder" type="button" disabled onclick="openConfirmationModal()" class="w-full bg-slate-300 text-slate-500 font-bold py-3 px-4 rounded-xl shadow-none transition-all flex items-center justify-center gap-2 text-sm cursor-not-allowed disabled:opacity-75">
+            <i data-lucide="lock" class="w-4 h-4"></i>
+            <span id="btnSubmitText">Min. RM 1,000.00 Dipersetujui</span>
           </button>
         </div>
 
@@ -279,7 +329,7 @@
           </div>
         </div>
 
-        <!-- Spesifikasi Mengikut Lajur CSV (A - J) -->
+        <!-- Spesifikasi Mengikut Lajur CSV -->
         <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs">
           <div>
             <span class="block text-slate-400 font-medium">SKU Code:</span>
@@ -326,6 +376,22 @@
 
       </div>
 
+    </div>
+  </div>
+
+  <!-- NOTICE / WARNING MODAL (REPLACES ALERT) -->
+  <div id="noticeModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 hidden opacity-0 transition-opacity duration-200">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 text-center space-y-4 transform scale-95 transition-transform duration-200" id="noticeModalContent">
+      <div id="noticeIconContainer" class="w-12 h-12 rounded-full flex items-center justify-center mx-auto bg-amber-100 text-amber-600">
+        <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+      </div>
+      <div>
+        <h4 id="noticeTitle" class="text-base font-bold text-slate-900">Perhatian</h4>
+        <p id="noticeMessage" class="text-xs text-slate-600 mt-1 leading-relaxed">Mesej notifikasi di sini.</p>
+      </div>
+      <button onclick="closeNoticeModal()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold py-2 rounded-xl text-xs transition-all cursor-pointer">
+        Faham & Tutup
+      </button>
     </div>
   </div>
 
@@ -401,17 +467,57 @@
     </div>
   </footer>
 
-  <!-- SCRIPT LOGIC -->
   <script>
     const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSUzQYVMVivCe2KvpRINLyHaWGX98loLRq76cib0sMM2HCMh6cUsZDU5W-dLCOX-GlYw02B5Frg7Toa/pub?output=csv";
     
     // URL WEB APP GOOGLE APPS SCRIPT
     const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzXvh0R0WYwtIlNez4lmNGzheiUeOF0p_bQFLg1NmlUVAb3SyTN9D0g3PYE0B_Y0bIu/exec";
 
+    // MINIMUM ORDER THRESHOLD CONSTANT (RM 1,000.00)
+    const MINIMUM_ORDER_THRESHOLD = 1000.00;
+
     let productsList = [];
     let cart = {}; // productId -> quantity
     let currentModalProductId = null;
     let currentGeneratedOrderNo = "";
+
+    /* Custom Notice Modal instead of system alert() */
+    function showCustomNotice(title, message, iconType = "warning") {
+      const modal = document.getElementById('noticeModal');
+      const content = document.getElementById('noticeModalContent');
+      const titleEl = document.getElementById('noticeTitle');
+      const msgEl = document.getElementById('noticeMessage');
+      const iconContainer = document.getElementById('noticeIconContainer');
+
+      titleEl.innerText = title;
+      msgEl.innerText = message;
+
+      if (iconType === "danger") {
+        iconContainer.className = "w-12 h-12 rounded-full flex items-center justify-center mx-auto bg-red-100 text-red-600";
+        iconContainer.innerHTML = '<i data-lucide="x-circle" class="w-6 h-6"></i>';
+      } else {
+        iconContainer.className = "w-12 h-12 rounded-full flex items-center justify-center mx-auto bg-amber-100 text-amber-600";
+        iconContainer.innerHTML = '<i data-lucide="alert-triangle" class="w-6 h-6"></i>';
+      }
+
+      if (window.lucide) lucide.createIcons();
+
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+        modal.classList.remove('opacity-0');
+        content.classList.remove('scale-95');
+      }, 10);
+    }
+
+    function closeNoticeModal() {
+      const modal = document.getElementById('noticeModal');
+      const content = document.getElementById('noticeModalContent');
+      modal.classList.add('opacity-0');
+      content.classList.add('scale-95');
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 200);
+    }
 
     /**
      * FUNGSI PENJANAAN NOMBOR TEMPAHAN UNIK (ORDER NUMBER GENERATOR)
@@ -679,6 +785,13 @@
       const subtotalSpan = document.getElementById('cartSubtotal');
       const grandTotalSpan = document.getElementById('cartGrandTotal');
 
+      // Progress bar elements
+      const minProgressBar = document.getElementById('minProgressBar');
+      const minOrderPercent = document.getElementById('minOrderPercent');
+      const minOrderNotice = document.getElementById('minOrderNotice');
+      const btnSubmitOrder = document.getElementById('btnSubmitOrder');
+      const btnSubmitText = document.getElementById('btnSubmitText');
+
       const cartProductIds = Object.keys(cart);
       let totalTypes = cartProductIds.length;
       let totalCartons = 0;
@@ -692,6 +805,9 @@
         cartonCountSpan.innerText = '0';
         subtotalSpan.innerText = 'RM 0.00';
         grandTotalSpan.innerText = 'RM 0.00';
+
+        // Reset progress bar
+        updateProgressBar(0, MINIMUM_ORDER_THRESHOLD);
         return;
       }
 
@@ -731,6 +847,62 @@
 
       headerBadge.innerText = totalCartons;
       headerBadge.classList.remove('hidden');
+
+      // Update minimum threshold progress bar and button
+      updateProgressBar(grandTotal, MINIMUM_ORDER_THRESHOLD);
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function updateProgressBar(currentTotal, minThreshold) {
+      const progressBar = document.getElementById('minProgressBar');
+      const percentText = document.getElementById('minOrderPercent');
+      const noticeText = document.getElementById('minOrderNotice');
+      const btnSubmit = document.getElementById('btnSubmitOrder');
+
+      const percentage = Math.min(100, Math.floor((currentTotal / minThreshold) * 100));
+      const difference = Math.max(0, minThreshold - currentTotal);
+
+      progressBar.style.width = `${percentage}%`;
+      percentText.innerText = `${percentage}%`;
+
+      if (currentTotal >= minThreshold) {
+        // Qualified
+        progressBar.className = "bg-gradient-to-r from-emerald-500 to-emerald-600 h-full rounded-full transition-all duration-300 w-0";
+        percentText.className = "font-black text-emerald-600 flex items-center gap-1";
+        percentText.innerHTML = `100% <i data-lucide="check-circle" class="w-3.5 h-3.5 inline"></i>`;
+
+        noticeText.className = "text-[11px] text-emerald-700 font-semibold leading-tight flex items-start gap-1 bg-emerald-50 p-2 rounded-lg border border-emerald-200";
+        noticeText.innerHTML = `
+          <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0 mt-0.5"></i>
+          <span>Tahniah! Tempahan anda melebihi RM 1,000.00 dan layak untuk dihantar.</span>
+        `;
+
+        btnSubmit.disabled = false;
+        btnSubmit.className = "w-full bg-blue-700 hover:bg-blue-800 active:bg-blue-900 text-white font-bold py-3 px-4 rounded-xl shadow-md transition-all flex items-center justify-center gap-2 text-sm cursor-pointer";
+        btnSubmit.innerHTML = `
+          <i data-lucide="send" class="w-4 h-4"></i>
+          <span>Hantar Tempahan Now</span>
+        `;
+      } else {
+        // Unqualified
+        progressBar.className = "bg-gradient-to-r from-amber-500 to-amber-600 h-full rounded-full transition-all duration-300 w-0";
+        percentText.className = "font-black text-amber-600";
+        percentText.innerText = `${percentage}%`;
+
+        noticeText.className = "text-[11px] text-slate-600 font-medium leading-tight flex items-start gap-1 bg-amber-50/60 p-2 rounded-lg border border-amber-200/60";
+        noticeText.innerHTML = `
+          <i data-lucide="alert-circle" class="w-3.5 h-3.5 text-amber-600 flex-shrink-0 mt-0.5"></i>
+          <span>Tempahan minimum <strong>RM 1,000.00</strong> diperlukan. Baki: <strong class="text-amber-700">RM ${difference.toFixed(2)}</strong> lagi.</span>
+        `;
+
+        btnSubmit.disabled = true;
+        btnSubmit.className = "w-full bg-slate-200 text-slate-400 font-bold py-3 px-4 rounded-xl transition-all flex items-center justify-center gap-2 text-sm cursor-not-allowed opacity-80 border border-slate-300/50";
+        btnSubmit.innerHTML = `
+          <i data-lucide="lock" class="w-4 h-4 text-slate-400"></i>
+          <span>Baki RM ${difference.toFixed(2)} Lagi Untuk Hantar</span>
+        `;
+      }
 
       if (window.lucide) lucide.createIcons();
     }
@@ -796,7 +968,6 @@
       openConfirmationModal();
     }
 
-    // POP-UP PENGESAHAN SEBELUM HANTAR
     function openConfirmationModal() {
       const form = document.getElementById('orderForm');
       
@@ -807,9 +978,25 @@
 
       const cartKeys = Object.keys(cart);
       if (cartKeys.length === 0) {
-        alert("Troli tempahan anda masih kosong. Sila pilih sekurang-kurangnya 1 produk.");
+        showCustomNotice("Troli Kosong", "Troli tempahan anda masih kosong. Sila pilih sekurang-kurangnya 1 produk.");
         const cartMsg = document.getElementById('emptyCartMessage');
         if (cartMsg) cartMsg.scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
+
+      // Calculate total amount to verify threshold strict control
+      let totalAmount = 0;
+      cartKeys.forEach(id => {
+        const prod = productsList.find(p => p.id === id);
+        if (prod) totalAmount += prod.cartonPrice * (cart[id] || 0);
+      });
+
+      if (totalAmount < MINIMUM_ORDER_THRESHOLD) {
+        const baki = MINIMUM_ORDER_THRESHOLD - totalAmount;
+        showCustomNotice(
+          "Syarat Minima Tempahan Belum Dicapai", 
+          `Jumlah tempahan semasa anda ialah RM ${totalAmount.toFixed(2)}. Tempahan tidak boleh dihantar kerana tidak mencapai jumlah minima RM 1,000.00. Sila tambah tempahan sebanyak RM ${baki.toFixed(2)} lagi.`
+        );
         return;
       }
 
@@ -817,19 +1004,18 @@
 
       const outletName = document.getElementById('outletName').value;
       const deliveryAddress = document.getElementById('deliveryAddress').value;
+      const deliveryState = document.getElementById('deliveryState').value;
       const contactName = document.getElementById('contactName').value;
       const contactPhone = document.getElementById('contactPhone').value;
       const contactEmail = document.getElementById('contactEmail').value;
       const deliveryDate = document.getElementById('deliveryDate').value || "Segera / Berdasarkan Jadual";
 
-      let totalAmount = 0;
       let itemsListHtml = '<ul class="divide-y divide-slate-200 my-2">';
       
       cartKeys.forEach(id => {
         const prod = productsList.find(p => p.id === id);
         const qty = cart[id];
         const sub = prod.cartonPrice * qty;
-        totalAmount += sub;
 
         itemsListHtml += `
           <li class="py-1.5 flex justify-between">
@@ -850,12 +1036,13 @@
             <span class="text-base font-extrabold text-blue-900">${currentGeneratedOrderNo}</span>
           </div>
           <div class="border-b border-slate-200 pb-2">
-            <p class="text-[11px] text-slate-500">1. Nama Outlet: <strong class="text-slate-800">${outletName}</strong></p>
+            <p class="text-[11px] text-slate-500">1. Nama Koperasi: <strong class="text-slate-800">${outletName}</strong></p>
             <p class="text-[11px] text-slate-500">2. Alamat Penghantaran: <span class="text-slate-700">${deliveryAddress}</span></p>
-            <p class="text-[11px] text-slate-500">3. Pegawai: <strong class="text-slate-800">${contactName}</strong></p>
-            <p class="text-[11px] text-slate-500">4. No. Telefon: <strong class="text-slate-800">${contactPhone}</strong></p>
-            <p class="text-[11px] text-slate-500">5. E-mel Pegawai: <strong class="text-slate-800">${contactEmail}</strong></p>
-            <p class="text-[11px] text-slate-500">6. Tarikh Penerimaan: <strong class="text-slate-800">${deliveryDate}</strong></p>
+            <p class="text-[11px] text-slate-500">3. Negeri Penghantaran: <strong class="text-blue-900 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-100">${deliveryState}</strong></p>
+            <p class="text-[11px] text-slate-500">4. Pegawai: <strong class="text-slate-800">${contactName}</strong></p>
+            <p class="text-[11px] text-slate-500">5. No. Telefon: <strong class="text-slate-800">${contactPhone}</strong></p>
+            <p class="text-[11px] text-slate-500">6. E-mel Pegawai: <strong class="text-slate-800">${contactEmail}</strong></p>
+            <p class="text-[11px] text-slate-500">7. Tarikh Penerimaan: <strong class="text-slate-800">${deliveryDate}</strong></p>
           </div>
           <div>
             <p class="font-bold text-slate-700 text-xs">Senarai Tempahan Barangan:</p>
@@ -901,7 +1088,6 @@
       submitBtn.disabled = !chk.checked;
     }
 
-    // PROSES HANTAR SELEPAS USER SETUJU CHECKBOX
     async function submitOrderProcess() {
       const chk = document.getElementById('chkAgreeTerms');
       if (!chk.checked) return;
@@ -910,6 +1096,7 @@
 
       const outletName = document.getElementById('outletName').value;
       const deliveryAddress = document.getElementById('deliveryAddress').value;
+      const deliveryState = document.getElementById('deliveryState').value;
       const contactName = document.getElementById('contactName').value;
       const contactPhone = document.getElementById('contactPhone').value;
       const contactEmail = document.getElementById('contactEmail').value;
@@ -955,12 +1142,13 @@
             <span class="text-base font-extrabold text-blue-900">${orderNo}</span>
           </div>
           <div class="border-b border-slate-200 pb-2">
-            <p class="text-[11px] text-slate-500">1. Nama Outlet: <strong class="text-slate-800">${outletName}</strong></p>
+            <p class="text-[11px] text-slate-500">1. Nama Koperasi: <strong class="text-slate-800">${outletName}</strong></p>
             <p class="text-[11px] text-slate-500">2. Alamat Penghantaran: <span class="text-slate-700">${deliveryAddress}</span></p>
-            <p class="text-[11px] text-slate-500">3. Pegawai: <strong class="text-slate-800">${contactName}</strong></p>
-            <p class="text-[11px] text-slate-500">4. No. Telefon: <strong class="text-slate-800">${contactPhone}</strong></p>
-            <p class="text-[11px] text-slate-500">5. E-mel Pegawai: <strong class="text-slate-800">${contactEmail}</strong></p>
-            <p class="text-[11px] text-slate-500">6. Tarikh Penerimaan: <strong class="text-slate-800">${deliveryDate}</strong></p>
+            <p class="text-[11px] text-slate-500">3. Negeri Penghantaran: <strong class="text-blue-900">${deliveryState}</strong></p>
+            <p class="text-[11px] text-slate-500">4. Pegawai: <strong class="text-slate-800">${contactName}</strong></p>
+            <p class="text-[11px] text-slate-500">5. No. Telefon: <strong class="text-slate-800">${contactPhone}</strong></p>
+            <p class="text-[11px] text-slate-500">6. E-mel Pegawai: <strong class="text-slate-800">${contactEmail}</strong></p>
+            <p class="text-[11px] text-slate-500">7. Tarikh Penerimaan: <strong class="text-slate-800">${deliveryDate}</strong></p>
           </div>
           <div>
             <p class="font-bold text-slate-700 text-xs">Ringkasan Barangan Ditempah:</p>
@@ -973,11 +1161,11 @@
         </div>
       `;
 
-      // Payload untuk dihantar ke Google Apps Script
       const payload = {
         orderNo,
         outletName,
         deliveryAddress,
+        deliveryState,
         contactName,
         contactPhone,
         contactEmail,
@@ -993,7 +1181,6 @@
       submitText.innerText = "Menghantar Tempahan...";
 
       try {
-        // Hantar data terus ke Google Apps Script tanpa menyekat fetch
         await fetch(GOOGLE_APPS_SCRIPT_URL, {
           method: 'POST',
           mode: 'no-cors',
@@ -1006,7 +1193,7 @@
         document.getElementById('successModal').classList.remove('hidden');
       } catch (err) {
         console.error("Ralat menghantar tempahan:", err);
-        alert("Gagal menghantar tempahan. Sila cuba lagi atau semak sambungan internet anda.");
+        showCustomNotice("Gagal Menhantar", "Gagal menghantar tempahan. Sila cuba lagi atau semak sambungan internet anda.", "danger");
       } finally {
         submitBtn.disabled = false;
         submitText.innerText = "Sahkan & Hantar Tempahan";
@@ -1027,6 +1214,7 @@
     window.addEventListener('DOMContentLoaded', () => {
       if (window.lucide) lucide.createIcons();
       loadProductCatalog();
+      renderCartSummary();
     });
   </script>
 </body>
